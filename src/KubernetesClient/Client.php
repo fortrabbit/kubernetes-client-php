@@ -137,14 +137,14 @@ class Client
         if (is_array($data) || is_object($data)) {
             switch ($verb) {
                 case 'PATCH-APPLY':
-                    stream_context_set_option($context, array('http' => array('content' => $this->encodeYamlBody($data, $options))));
+                    stream_context_set_options($context, array('http' => array('content' => $this->encodeYamlBody($data, $options))));
                     break;
                 default:
-                    stream_context_set_option($context, array('http' => array('content' => $this->encodeJsonBody($data, $options))));
+                    stream_context_set_options($context, array('http' => array('content' => $this->encodeJsonBody($data, $options))));
                     break;
             }
         } else {
-            stream_context_set_option($context, array('http' => array('content' => $data)));
+            stream_context_set_options($context, array('http' => array('content' => $data)));
         }
     }
 
