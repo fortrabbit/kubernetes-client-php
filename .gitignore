@@ -22,3 +22,4 @@ composer.lock
 # always keep .keep files around
 !.keep
 
+/.shiki/
