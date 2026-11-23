@@ -1,3 +1,19 @@
+# v0.4.7
+
+Released 2026-11-19
+
+- allow `symfony/yaml` `^8.0`
+- fix php 8.4 deprecation warning when setting request bodies (`stream_context_set_option`)
+
+# v0.4.6
+
+Released 2026-11-19
+
+- periodically re-read token files (in-cluster service account token, kubeconfig `tokenFile`) to support token rotation (matches `client-go` behavior)
+- support `tokenFile` in kubeconfig users
+- refresh exec provider credentials on expiry even when only a client cert/key is returned
+- remove stray `var_dump` from watch connection errors
+
 # v0.4.5
 
 Released 2025-03-22

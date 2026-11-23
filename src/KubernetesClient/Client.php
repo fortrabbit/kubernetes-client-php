@@ -61,6 +61,9 @@ class Client
             ),
         );
 
+        // must be invoked prior to reading cert/key paths as it may refresh them (ie: exec provider)
+        $token = $this->config->getToken();
+
         if (!$this->config->getVerifyPeerName()) {
             $opts['ssl']['verify_peer_name'] = false;
         }
@@ -77,7 +80,6 @@ class Client
             $opts['ssl']['local_pk'] = $this->config->getClientKeyPath();
         }
 
-        $token = $this->config->getToken();
         if (!empty($token)) {
             $opts['http']['header'] .= "Authorization: Bearer {$token}\r\n";
         }
@@ -137,15 +139,16 @@ class Client
         if (is_array($data) || is_object($data)) {
             switch ($verb) {
                 case 'PATCH-APPLY':
-                    stream_context_set_options($context, array('http' => array('content' => $this->encodeYamlBody($data, $options))));
+                    $data = $this->encodeYamlBody($data, $options);
                     break;
                 default:
-                    stream_context_set_options($context, array('http' => array('content' => $this->encodeJsonBody($data, $options))));
+                    $data = $this->encodeJsonBody($data, $options);
                     break;
             }
-        } else {
-            stream_context_set_options($context, array('http' => array('content' => $data)));
         }
+
+        // the 2 argument (array) form is deprecated as of php 8.4
+        stream_context_set_option($context, 'http', 'content', $data);
     }
 
     private function encodeJsonBody($data, $options = [])
